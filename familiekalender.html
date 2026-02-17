@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Familiekalender</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/icalendar@6.1.8/index.global.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+    }
+    #calendar {
+      max-width: 1200px;
+      margin: 20px auto;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="calendar"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var calendarEl = document.getElementById('calendar');
+
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        height: 'auto',
+        eventDisplay: 'block',
+
+        eventSources: [
+          {
+            url: 'https://summer-sound-c722.hnygaard2.workers.dev/?src=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Fhenkenygaard%2540gmail.com%2Fpublic%2Fbasic.ics',
+            format: 'ics',
+            type: 'ical',
+            color: '#1e90ff',
+            textColor: 'white'
+          },
+          {
+            url: 'https://summer-sound-c722.hnygaard2.workers.dev/?src=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Fde2cfc99f9bd45542898975f6fc4db50f27034ff4eb5ffcd6ad400dd19d7a859%2540group.calendar.google.com%2Fpublic%2Fbasic.ics',
+            format: 'ics',
+            type: 'ical',
+            color: '#ff8c00',
+            textColor: 'white'
+          },
+          {
+            url: 'https://summer-sound-c722.hnygaard2.workers.dev/?src=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Fhilde.navdal%2540gmail.com%2Fpublic%2Fbasic.ics',
+            format: 'ics',
+            type: 'ical',
+            color: '#32cd32',
+            textColor: 'white'
+          },
+          {
+            url: 'https://summer-sound-c722.hnygaard2.workers.dev/?src=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2F8f321de4fa8605dd6a582f01b53af8843863b39bf27e03b177dd8f8cb7e841a4%2540group.calendar.google.com%2Fpublic%2Fbasic.ics',
+            format: 'ics',
+            type: 'ical',
+            color: '#ba55d3',
+            textColor: 'white'
+          }
+        ]
+      });
+
+      calendar.render();
+    });
+  </script>
+</body>
+</html>
