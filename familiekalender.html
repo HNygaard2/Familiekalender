@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Familiekalender</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+
+  <!-- ICAL.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ical.js/1.4.0/ical.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/icalendar@6.1.8/index.global.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      font-family: Arial, sans-serif;
+    }
+
+    #calendar {
+      width: 100%;
+      height: 100%;
+      margin: 0 auto;
+    }
+
+    /* FJERN NAVIGASJON */
+    .fc-toolbar { display: none !important; }
+
+    /* 2-UKERS GRID: 7 kolonner × 2 rader */
+    .fc-daygrid-body {
+      display: grid !important;
+      grid-template-columns: repeat(7, 1fr) !important;
+      grid-template-rows: repeat(2, 1fr) !important;
+      height: 1800px !important; /* Perfekt for 1080×1920 portrett */
+    }
+
+    .fc-daygrid-day {
+      border: 1px solid #ddd !important;
+      padding: 6px;
+      height: 100% !important;
+    }
+
+    /* Store datoer */
+    .fc-daygrid-day-number {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #222;
+    }
+
+    /* Hendelser */
+    .fc-event {
+      border-radius: 6px !important;
+      padding: 4px 6px !important;
+      font-size: 1.1rem !important;
+      margin-top: 4px !important;
+      white-space: normal !important;
+    }
+
+    /* Roligere heldagshendelser */
+    .fc-daygrid-event-harness .fc-event {
+      opacity: 0.75;
+      font-weight: normal;
+    }
+
+    /* Fjern prikker */
+    .fc-daygrid-event-dot { display: none !important; }
+  </style>
+</head>
+
+<body>
+  <div id="calendar"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+      // Finn mandag i inneværende uke
+      let today = new Date();
+      let day = today.getDay(); // 0 = søndag
+      let diff = today.getDate() - day + (day === 0 ? -6 : 1);
+      let startDate = new Date(today.setDate(diff));
+
+      // Sluttdato = start + 13 dager
+      let endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + 13);
+
+      var calendarEl = document.getElementById('calendar');
+
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'twoWeek',
+        views: {
+          twoWeek: {
+            type: 'dayGrid',
+            duration: { days: 14 }
+          }
+        },
+
+        validRange: {
+          start: startDate,
+          end: endDate
+        },
+
+        headerToolbar: false,
+        height: '100%',
+        eventDisplay: 'block',
+        displayEventTime: true,
+        eventTimeFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
+
+        eventSources: [
+          {
+            url: 'https://summer-sound-c722.hnygaard2.workers.dev/?src=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Fhenkenygaard%2540gmail.com%2Fpublic%2Fbasic.ics',
+            format: 'ics',
+            color: '#6e6e41',     // Henrik – Avokado
+            textColor: 'white'
+          },
+          {
+            url: 'https://summer-sound-c722.hnygaard2.workers.dev/?src=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Fde2cfc99f9bd45542898975f6fc4db50f27034ff4eb5ffcd6ad400dd19d7a859%2540group.calendar.google.com%2Fpublic%2Fbasic.ics',
+            format: 'ics',
+            color: '#f6bf26',     // Elida – Banan
+            textColor: 'black'
+          },
+          {
+            url: 'https://summer-sound-c722.hnygaard2.workers.dev/?src=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2Fhilde.navdal%2540gmail.com%2Fpublic%2Fbasic.ics',
+            format: 'ics',
+            color: '#0b8043',     // Hilde – Eucalyptus
+            textColor: 'white'
+          },
+          {
+            url: 'https://summer-sound-c722.hnygaard2.workers.dev/?src=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2F8f321de4fa8605dd6a582f01b53af8843863b39bf27e03b177dd8f8cb7e841a4%2540group.calendar.google.com%2Fpublic%2Fbasic.ics',
+            format: 'ics',
+            color: '#3f51b5',     // Lovise – Blå regn
+            textColor: 'white'
+          }
+        ],
+
+        // Overstyr farge for Henrik sine heldagshendelser
+        eventDidMount: function(info) {
+          const isHenrik = info.event.source.url.includes('henkenygaard');
+          if (isHenrik && info.event.allDay) {
+            info.el.style.backgroundColor = '#616161'; // Grafitt
+            info.el.style.borderColor = '#616161';
+            info.el.style.color = 'white';
+            info.el.style.opacity = '0.6';
+          }
+        }
+      });
+
+      calendar.render();
+    });
+  </script>
+</body>
+</html>
